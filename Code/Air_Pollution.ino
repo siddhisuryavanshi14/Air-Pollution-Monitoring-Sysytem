@@ -29,7 +29,7 @@ char dpString[6];
 char humidityString[6];
 char pressureString[7];
 String apiKey = "T628M0MQYLRH4JY1";
-const char* ssid = "siddhi";
+const char* ssid = "Siddhi";
 const char* password = "siddhi14";
 const char* server = "api.thingspeak.com";
 WiFiClient client;
@@ -86,28 +86,30 @@ void loop() {
 
       if (client.connect(server,80))  // "184.106.153.149" or api.thingspeak.com
      {
-        String postStr = apiKey;
-        postStr +="&field1=";
-        postStr += String(air_quality);
-        postStr +="&field2=";
-        postStr += String(pressureString);
-        postStr +="&field3=";
-        postStr += String(humidityString);
-        postStr +="&field4=";
-        postStr += String(dpString);
-        postStr +="&field5=";
-        postStr += String(temperatureFString);
-        postStr += "\r\n\r\n";
-
-        client.print("POST /update HTTP/1.1\n");
-        client.print("Host: api.thingspeak.com\n");
-        client.print("Connection: close\n");
-        client.print("X-THINGSPEAKAPIKEY: "+apiKey+"\n");
-        client.print("Content-Type: application/x-www-form-urlencoded\n");
-        client.print("Content-Length: ");
-        client.print(postStr.length());
-        client.print("\n\n");
-        client.print(postStr); 
+        if(String(humidityString)!="nan" &&  temperatureFString>0) {
+          String postStr = apiKey;
+          postStr +="&field1=";
+          postStr += String(air_quality);
+          postStr +="&field2=";
+          postStr += String(pressureString);
+          postStr +="&field3=";
+          postStr += String(humidityString);
+          postStr +="&field4=";
+          postStr += String(dpString);
+          postStr +="&field5=";
+          postStr += String(temperatureFString);
+          postStr += "\r\n\r\n";
+  
+          client.print("POST /update HTTP/1.1\n");
+          client.print("Host: api.thingspeak.com\n");
+          client.print("Connection: close\n");
+          client.print("X-THINGSPEAKAPIKEY: "+apiKey+"\n");
+          client.print("Content-Type: application/x-www-form-urlencoded\n");
+          client.print("Content-Length: ");
+          client.print(postStr.length());
+          client.print("\n\n");
+          client.print(postStr); 
+        }
     }   
     client.stop();  
 }  
